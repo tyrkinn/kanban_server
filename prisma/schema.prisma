@@ -1,0 +1,41 @@
+datasource db {
+  provider = "mongodb"
+  url      = "mongodb+srv://feat:424242@cluster0.wiycgvv.mongodb.net/kaban?retryWrites=true&w=majority"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+enum TaskStatus {
+  NOT_DONE
+  IN_PROGRESS
+  DONE
+}
+
+model User {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  login    String  @unique
+  password String
+  boards   Board[]
+}
+
+model Board {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  title  String
+  tasks  Task[]
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model Task {
+  id      String     @id @default(auto()) @map("_id") @db.ObjectId
+  title   String
+  board   Board      @relation(fields: [boardId], references: [id])
+  boardId String
+  status  TaskStatus @default(NOT_DONE)
+}

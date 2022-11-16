@@ -1,0 +1,36 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  login String [unique, not null]
+  password String [not null]
+  boards Board [not null]
+}
+
+Table Board {
+  id String [pk]
+  title String [not null]
+  tasks Task [not null]
+  user User [not null]
+  userId String [not null]
+}
+
+Table Task {
+  id String [pk]
+  title String [not null]
+  board Board [not null]
+  boardId String [not null]
+  status TaskStatus [not null, default: 'NOT_DONE']
+}
+
+Enum TaskStatus {
+  NOT_DONE
+  IN_PROGRESS
+  DONE
+}
+
+Ref: Board.userId > User.id
+
+Ref: Task.boardId > Board.id
